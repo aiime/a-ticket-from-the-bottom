@@ -17,6 +17,8 @@ public class Mover : MonoBehaviour
 
     private void Start()
     {
+        agent.speed = speed;
+        agent.acceleration = 60;
         agent.updateRotation = false;
     }
 
@@ -25,53 +27,41 @@ public class Mover : MonoBehaviour
         if (inMotion && agent.velocity.sqrMagnitude > Mathf.Epsilon)
         {
             agentTransform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
-        }   
+        }
     }
 
-    public void Move(Vector3 point)
+    public void MoveTo(Vector3 point)
     {
         if (inMotion)
         {
             if (MovementEnd != null) MovementEnd.Invoke();
         }
-
-        agent.speed = speed;
-        agent.acceleration = 60;
+        else
+        {
+            inMotion = true;
+        }
+        agent.isStopped = false;
         agent.SetDestination(point);
         StartCoroutine(WaitForMovementEnd());
-        inMotion = true;
         if (MovementStart != null) MovementStart.Invoke(point);
+    }
+
+    public void Stop()
+    {
+        if (MovementEnd != null) MovementEnd.Invoke();
+        agent.SetDestination(agentTransform.position);
+        inMotion = false;
     }
 
     IEnumerator WaitForMovementEnd()
     {
-        while (true)
+        while (Vector3.Distance(agentTransform.position, agent.destination) > agent.stoppingDistance)
         {
-            if (agent.pathPending)
-            {
-                yield return null;
-                continue;
-            }
-            if (agent.remainingDistance > agent.stoppingDistance)
-            {
-                yield return null;
-                continue;
-            }
-            if (agent.hasPath)
-            {
-                yield return null;
-                continue;
-            }
-            if (agent.velocity.sqrMagnitude != 0f)
-            {
-                yield return null;
-                continue;
-            }
-
-            inMotion = false;
-            if (MovementEnd != null) MovementEnd.Invoke();
-            if (TargetReached != null) TargetReached.Invoke();
-            break;
+            yield return null;
         }
+
+        if (MovementEnd != null) MovementEnd.Invoke();
+        if (TargetReached != null) TargetReached.Invoke();
+        inMotion = false;
     }
 }

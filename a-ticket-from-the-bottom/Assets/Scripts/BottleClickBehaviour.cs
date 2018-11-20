@@ -1,20 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Ticket.Items;
+using Ticket.Inventory;
 
 public class BottleClickBehaviour : MonoBehaviour, IClickable
 {
     [SerializeField] private Mover mover;
+    [SerializeField] InventoryModel inventory;
+    [SerializeField] Item item;
 
-    private void Start()
+    private bool agentMovesToItem;
+
+    public void OnClick(GameObject clickedObject, Vector3 clickPoint)
     {
-        
+        mover.MoveTo(clickedObject.transform.position);
+
+        agentMovesToItem = true;
+        mover.MovementEnd += AgentNoLongerMovesToItem;
+        mover.TargetReached += AgentNoLongerMovesToItem;
     }
 
-    public void OnClick(GameObject obj, Vector3 point)
+    private void AgentNoLongerMovesToItem()
     {
-        mover.Move(obj.transform.position);
+        agentMovesToItem = false;
+
+        mover.MovementEnd -= AgentNoLongerMovesToItem;
+        mover.TargetReached -= AgentNoLongerMovesToItem;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (agentMovesToItem)
+        {
+            mover.Stop();
+            inventory.AddItem(item);
+            Destroy(transform.gameObject);
+        } 
+    }
 
+    private void OnDestroy()
+    {
+        mover.MovementEnd -= AgentNoLongerMovesToItem;
+        mover.TargetReached -= AgentNoLongerMovesToItem;
+    }
 }

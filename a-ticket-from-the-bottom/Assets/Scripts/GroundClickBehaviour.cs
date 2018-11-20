@@ -6,6 +6,6 @@ public class GroundClickBehaviour : MonoBehaviour, IClickable
 
     public void OnClick(GameObject obj, Vector3 point)
     {
-        mover.Move(point);
+        mover.MoveTo(point);
     }
 }
