@@ -5,9 +5,10 @@ using UnityEngine.AI;
 
 public class Mover : MonoBehaviour
 {
-    [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform agentTransform;
     [SerializeField] private float speed;
+
+    public NavMeshAgent agent;
+    public Transform agentTransform; 
 
     public Action<Vector3> MovementStart;
     public Action MovementEnd;

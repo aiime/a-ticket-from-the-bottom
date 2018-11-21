@@ -12,7 +12,7 @@ namespace Ticket.Items
         {
             name = "Aluminum can";
             Cost = 40;
-            ItemColor = Color.black;
+            ItemColor = Color.red;
         }
     }
 }

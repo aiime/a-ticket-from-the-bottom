@@ -4,9 +4,10 @@ using Ticket.Inventory;
 
 public class BottleClickBehaviour : MonoBehaviour, IClickable
 {
-    [SerializeField] private Mover mover;
-    [SerializeField] InventoryModel inventory;
-    [SerializeField] Item item;
+    public Mover mover;
+    public InventoryModel inventory;
+    public Transform playerTransform;
+    public Item item;
 
     private bool agentMovesToItem;
 
@@ -27,14 +28,18 @@ public class BottleClickBehaviour : MonoBehaviour, IClickable
         mover.TargetReached -= AgentNoLongerMovesToItem;
     }
 
-    private void OnTriggerEnter(Collider other)
+    /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если предмет заспаунится прямо на герое, 
+       то OnTriggerEnter при щелчке по предмету не сработает. */
+    private void OnTriggerStay(Collider other)
     {
-        if (agentMovesToItem)
+        if (agentMovesToItem && other.gameObject.tag == "Player")
         {
             mover.Stop();
+            playerTransform.rotation = 
+                Quaternion.LookRotation(this.transform.position - playerTransform.position);
             inventory.AddItem(item);
             Destroy(transform.gameObject);
-        } 
+        }
     }
 
     private void OnDestroy()
