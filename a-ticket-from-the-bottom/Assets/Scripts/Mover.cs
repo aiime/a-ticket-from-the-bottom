@@ -10,7 +10,7 @@ public class Mover : MonoBehaviour
     public NavMeshAgent agent;
     public Transform agentTransform; 
 
-    public Action<Vector3> MovementStart;
+    public Action MovementStart;
     public Action MovementEnd;
     public Action TargetReached;
 
@@ -44,7 +44,7 @@ public class Mover : MonoBehaviour
         agent.isStopped = false;
         agent.SetDestination(point);
         StartCoroutine(WaitForMovementEnd());
-        if (MovementStart != null) MovementStart.Invoke(point);
+        if (MovementStart != null) MovementStart.Invoke();
     }
 
     public void Stop()
@@ -61,8 +61,7 @@ public class Mover : MonoBehaviour
             yield return null;
         }
 
-        if (MovementEnd != null) MovementEnd.Invoke();
-        if (TargetReached != null) TargetReached.Invoke();
         inMotion = false;
+        if (TargetReached != null) TargetReached.Invoke();   
     }
 }

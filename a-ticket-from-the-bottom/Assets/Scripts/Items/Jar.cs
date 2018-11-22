@@ -10,7 +10,7 @@ namespace Ticket.Items
 
         private void Awake()
         {
-            name = "Jar";
+            Name = "Jar";
             Cost = 18;
             ItemColor = Color.cyan;
         }

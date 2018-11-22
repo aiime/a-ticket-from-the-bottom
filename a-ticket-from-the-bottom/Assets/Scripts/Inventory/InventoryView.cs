@@ -9,28 +9,33 @@ namespace Ticket.Inventory
     public class InventoryView : MonoBehaviour
     {
         [SerializeField] Sprite defaultBottle;
-        [SerializeField] InventoryModel inventory;
+        [SerializeField] InventoryModel inventoryModel;
         [SerializeField] Transform inventoryPanel;
+        [SerializeField] GameObject bottleSlotPrefab;
+        [SerializeField] UniversalsModel universalsModel;
+
+        public List<GameObject> BottleSlots;
 
         private List<Image> bottleRenderers;
 
         private void Start()
         {
-            bottleRenderers = new List<Image>(inventory.capacity);
+            BottleSlots = new List<GameObject>();
+            bottleRenderers = new List<Image>(inventoryModel.Capacity);
 
-            for (int i = 0; i < inventory.capacity; i++)
+            for (int i = 0; i < inventoryModel.Capacity; i++)
             {
-                GameObject bottleSlot = new GameObject("Bottle Slot");
-                Image bottleRenderer = bottleSlot.AddComponent<Image>();
-                bottleRenderer.sprite = defaultBottle;
-                bottleRenderer.color = Color.gray;
-                bottleSlot.transform.SetParent(inventoryPanel);
+                GameObject bottleSlot = Instantiate(bottleSlotPrefab, inventoryPanel);
+                bottleSlot.GetComponent<SlotBehaviour>().SlotNumber = i;
+                bottleSlot.GetComponent<SlotBehaviour>().InventoryModel = inventoryModel;
+                bottleSlot.GetComponent<SlotBehaviour>().UniversalsBehaviour = universalsModel;
 
-                bottleRenderers.Add(bottleRenderer);
+                BottleSlots.Add(bottleSlot);
+                bottleRenderers.Add(bottleSlot.GetComponent<Image>());
             }
 
-            inventory.ItemAdded += DisplayNewBottle;
-            inventory.ItemRemoved += RemoveBottleFromPanel;
+            inventoryModel.ItemAdded += DisplayNewBottle;
+            inventoryModel.ItemRemoved += RemoveBottleFromPanel;
         }
 
         private void DisplayNewBottle(int i, Item bottle)

@@ -17,7 +17,6 @@ public class BottleClickBehaviour : MonoBehaviour, IClickable
 
         agentMovesToItem = true;
         mover.MovementEnd += AgentNoLongerMovesToItem;
-        mover.TargetReached += AgentNoLongerMovesToItem;
     }
 
     private void AgentNoLongerMovesToItem()
@@ -25,7 +24,6 @@ public class BottleClickBehaviour : MonoBehaviour, IClickable
         agentMovesToItem = false;
 
         mover.MovementEnd -= AgentNoLongerMovesToItem;
-        mover.TargetReached -= AgentNoLongerMovesToItem;
     }
 
     /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если предмет заспаунится прямо на герое, 
@@ -34,6 +32,8 @@ public class BottleClickBehaviour : MonoBehaviour, IClickable
     {
         if (agentMovesToItem && other.gameObject.tag == "Player")
         {
+            agentMovesToItem = false;
+
             mover.Stop();
             playerTransform.rotation = 
                 Quaternion.LookRotation(this.transform.position - playerTransform.position);
@@ -45,6 +45,5 @@ public class BottleClickBehaviour : MonoBehaviour, IClickable
     private void OnDestroy()
     {
         mover.MovementEnd -= AgentNoLongerMovesToItem;
-        mover.TargetReached -= AgentNoLongerMovesToItem;
     }
 }

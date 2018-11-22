@@ -8,7 +8,7 @@ namespace Ticket.Inventory
     [AddComponentMenu("Ticket/Inventory/Inventory Model")]
     public class InventoryModel : MonoBehaviour
     {
-        public int capacity;
+        public int Capacity;
         private List<Item> inventory;
 
         public Action<int, Item> ItemAdded; // int - индекс ячейки; Item - добавленный предмет.
@@ -16,7 +16,7 @@ namespace Ticket.Inventory
 
         private void Awake()
         {
-            inventory = new List<Item>(capacity);
+            inventory = new List<Item>(Capacity);
             for (int i = 0; i < inventory.Capacity; i++)
             {
                 inventory.Add(null);
@@ -38,9 +38,18 @@ namespace Ticket.Inventory
 
         public Item RemoveItem(int i)
         {
-            inventory[i] = null;
-            if (ItemRemoved != null) ItemRemoved.Invoke(i, inventory[i]);
-            return inventory[i];
+            if (inventory[i] != null)
+            {
+                Item removedItem = inventory[i].Clone() as Item;
+                inventory[i] = null;
+
+                if (ItemRemoved != null) ItemRemoved.Invoke(i, removedItem);
+                return removedItem;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
