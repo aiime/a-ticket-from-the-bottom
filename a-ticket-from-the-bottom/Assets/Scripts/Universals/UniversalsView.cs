@@ -13,6 +13,6 @@ public class UniversalsView : MonoBehaviour
 
     private void UpdateUniversalView(int newUnivarsalValue)
     {
-        universalsText.text = newUnivarsalValue.ToString() + "u";
+        universalsText.text = newUnivarsalValue.ToString();
     }
 }

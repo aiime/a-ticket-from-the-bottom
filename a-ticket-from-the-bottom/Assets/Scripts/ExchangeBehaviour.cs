@@ -3,11 +3,11 @@ using Ticket.Inventory;
 
 namespace Ticket.Click
 {
-    public class ShopBehaviour : MonoBehaviour, IClickable
+    public class ExchangeBehaviour : MonoBehaviour, IClickable
     {
         [SerializeField] private Mover playerMover;
         [SerializeField] private Transform playerTransform;
-        [SerializeField] private Transform shopTransform;
+        [SerializeField] private Transform exchangeTransform;
         [SerializeField] private InventoryView inventoryView;
         [SerializeField] private CanvasGroup inventoryCG;
 
@@ -15,47 +15,47 @@ namespace Ticket.Click
         {
             playerMover.MoveTo(clickedObject.transform.position);
 
-            playerMover.MovementEnd += AgentNoLongerMovesToShop;
-            playerMover.TargetReached += AgentReachedShop;
+            playerMover.MovementEnd += PlayerNoLongerMovesToShop;
+            playerMover.TargetReached += PlayerReachedShop;
         }
 
-        private void AgentNoLongerMovesToShop()
+        private void PlayerNoLongerMovesToShop()
         {
-            playerMover.MovementEnd -= AgentNoLongerMovesToShop;
-            playerMover.TargetReached -= AgentReachedShop;
+            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
+            playerMover.TargetReached -= PlayerReachedShop;
         }
 
-        private void AgentReachedShop()
+        private void PlayerReachedShop()
         {
-            playerMover.MovementEnd -= AgentNoLongerMovesToShop;
-            playerMover.TargetReached -= AgentReachedShop;
+            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
+            playerMover.TargetReached -= PlayerReachedShop;
 
-            Quaternion rotationTowardShop = 
-                Quaternion.LookRotation(shopTransform.position - playerTransform.position);
+            Quaternion rotationTowardExchange = 
+                Quaternion.LookRotation(exchangeTransform.position - playerTransform.position);
 
-            // Нужно, чтобы модель игрока просто развернулась по 'y' в сторону окна магазина, а не задиралась
+            // Нужно, чтобы модель игрока просто развернулась по 'y' в сторону окна приёмки, а не задиралась
             // дополнительно вверх по 'x' и 'z' по навравлению в центр окна. Поэтому обнуляем их.
-            rotationTowardShop.x = 0;
-            rotationTowardShop.z = 0;
+            rotationTowardExchange.x = 0;
+            rotationTowardExchange.z = 0;
 
-            playerTransform.rotation = rotationTowardShop;
+            playerTransform.rotation = rotationTowardExchange;
 
-            ActivateShopMode();
+            ActivateExchangeMode();
         }
 
-        private void ActivateShopMode()
+        private void ActivateExchangeMode()
         {
             inventoryCG.interactable = true;
-            playerMover.MovementStart += AgentLeavesShop;
+            playerMover.MovementStart += PlayerLeavesShop;
         }
 
-        private void AgentLeavesShop()
+        private void PlayerLeavesShop()
         {
-            playerMover.MovementStart -= AgentLeavesShop;
-            DeactivateShopMode();
+            playerMover.MovementStart -= PlayerLeavesShop;
+            DeactivateExchangeMode();
         }
 
-        private void DeactivateShopMode()
+        private void DeactivateExchangeMode()
         {
             inventoryCG.interactable = false;
         }
