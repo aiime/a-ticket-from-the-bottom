@@ -11,10 +11,11 @@ namespace Ticket.Items
         [SerializeField] Mover mover;
         [SerializeField] InventoryModel inventory;
         [SerializeField] Transform playerTransform;
+        [SerializeField] Transform itemParent;
 
         private void Awake()
         {
-            name = itemPrefab.GetComponent<BottleClickBehaviour>().item.name + " spawner";
+            name = itemPrefab.GetComponent<ItemBehaviour>().item.name + " spawner";
         }
 
         private void Start()
@@ -28,10 +29,11 @@ namespace Ticket.Items
             {
                 yield return new WaitForSeconds(spawnInterval);
 
-                GameObject itemPrefab = Instantiate(this.itemPrefab, this.transform);
+                GameObject itemPrefab = 
+                    Instantiate(this.itemPrefab, this.transform.position, Quaternion.identity, itemParent);
 
-                BottleClickBehaviour itemPrefabBottleClickBehaviour = 
-                    itemPrefab.GetComponent<BottleClickBehaviour>();
+                ItemBehaviour itemPrefabBottleClickBehaviour = 
+                    itemPrefab.GetComponent<ItemBehaviour>();
 
                 itemPrefabBottleClickBehaviour.mover = mover;
                 itemPrefabBottleClickBehaviour.inventory = inventory;

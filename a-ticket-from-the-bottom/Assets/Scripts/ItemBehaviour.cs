@@ -2,7 +2,7 @@
 using Ticket.Items;
 using Ticket.Inventory;
 
-public class BottleClickBehaviour : MonoBehaviour, IClickable
+public class ItemBehaviour : MonoBehaviour, IClickable
 {
     public Mover mover;
     public InventoryModel inventory;

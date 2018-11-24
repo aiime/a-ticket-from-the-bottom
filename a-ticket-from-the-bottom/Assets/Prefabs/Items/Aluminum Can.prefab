@@ -55,9 +55,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4834827294049424}
-  - component: {fileID: 114533475653652322}
   - component: {fileID: 65944702441671840}
   - component: {fileID: 114756181651451742}
+  - component: {fileID: 114179658837833946}
   m_Layer: 0
   m_Name: Aluminum Can
   m_TagString: Clickable
@@ -226,7 +226,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114533475653652322
+--- !u!114 &114179658837833946
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1764251048731242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c06ac08b52d0c6c4fabd95187a5692ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 994893a715e3a394a96da8505376f29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mover: {fileID: 0}
