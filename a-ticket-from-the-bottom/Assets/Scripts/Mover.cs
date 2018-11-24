@@ -15,6 +15,7 @@ public class Mover : MonoBehaviour
     public Action TargetReached;
 
     private bool inMotion;
+   // private Coroutine waitForMovementEndCoroutine;
 
     private void Start()
     {
@@ -50,7 +51,7 @@ public class Mover : MonoBehaviour
     public void Stop()
     {
         if (MovementEnd != null) MovementEnd.Invoke();
-        agent.SetDestination(agentTransform.position);
+        agent.isStopped = true;
         inMotion = false;
     }
 

@@ -1,27 +1,33 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class NPCBehaviour : MonoBehaviour
+namespace Ticket.NPC
 {
-    [SerializeField] Mover npcMover;
-    [SerializeField] Transform[] patrolPoints;
-    [SerializeField] float restTime;
-
-    private int i;
-
-    private void Start()
+    public class NPCBehaviour : MonoBehaviour
     {
-        npcMover.MoveTo(patrolPoints[0].position);
-        npcMover.TargetReached += () =>
+        [SerializeField] PatrolBehaviour patrolBehaviour;
+        [SerializeField] GarbageDisposalBehaviour garbageDisposalBehaviour;
+
+        private void Start()
         {
-            i = (i + 1) % patrolPoints.Length;
-            StartCoroutine(RestThenMove(patrolPoints[i]));
-        };
-    }
+            patrolBehaviour.StartPatrol();
+            StartCoroutine(DisposeTrashAfterPause());
+        }
 
-    IEnumerator RestThenMove(Transform nextPoint)
-    {
-        yield return new WaitForSeconds(restTime);
-        npcMover.MoveTo(nextPoint.position);
+        IEnumerator DisposeTrashAfterPause()
+        {
+            int pause = Random.Range(6, 16);
+            yield return new WaitForSeconds(pause);
+            patrolBehaviour.StopPatrol();
+            garbageDisposalBehaviour.DisposeTrash();
+            garbageDisposalBehaviour.garbageDisposed += ReturnToPatrol;
+        }
+
+        private void ReturnToPatrol()
+        {
+            garbageDisposalBehaviour.garbageDisposed -= ReturnToPatrol;
+            patrolBehaviour.StartPatrol();
+            StartCoroutine(DisposeTrashAfterPause());
+        }
     }
 }
