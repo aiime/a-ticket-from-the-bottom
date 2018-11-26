@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Ticket.Inventory;
+using Ticket.GeneralMovement;
 
 namespace Ticket.Click
 {

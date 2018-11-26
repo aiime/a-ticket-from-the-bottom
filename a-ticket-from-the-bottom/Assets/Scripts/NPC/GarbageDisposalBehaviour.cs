@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Ticket.Bin;
 using Ticket.Items;
+using Ticket.GeneralMovement;
 
 namespace Ticket.NPC
 {
@@ -10,7 +11,7 @@ namespace Ticket.NPC
     {
         [SerializeField] Mover npcMover;
         [SerializeField] NavMeshAgent npcAgent;
-        [SerializeField] Item trashItem;
+        [SerializeField] ItemDB itemDB;
 
         public Action garbageDisposed;
 
@@ -36,7 +37,7 @@ namespace Ticket.NPC
         private void ThrowTrashInBin()
         {
             npcMover.TargetReached -= ThrowTrashInBin;
-            binBehaviour.ReceiveItem(trashItem);
+            binBehaviour.ReceiveItem(itemDB.GetItem(UnityEngine.Random.Range(0, 5)));
             if (garbageDisposed != null) garbageDisposed.Invoke();
         }
 

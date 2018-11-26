@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ticket.GeneralMovement;
 
 public class ShopBehaviour : MonoBehaviour, IClickable
 {

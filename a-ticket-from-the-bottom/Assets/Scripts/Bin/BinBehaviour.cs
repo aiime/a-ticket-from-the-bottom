@@ -10,7 +10,8 @@ namespace Ticket.Bin
 
         public void ReceiveItem(Item item)
         {
-            itemsInside.Push(item.Clone() as Item);
+            itemsInside.Push(item);
+            print("received: x1 [" + item.Name + "]");
         }
 
         public List<Item> GiveItems(int itemsRequired)

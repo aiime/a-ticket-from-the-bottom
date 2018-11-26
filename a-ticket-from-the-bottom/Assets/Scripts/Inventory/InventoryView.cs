@@ -34,16 +34,13 @@ namespace Ticket.Inventory
                 bottleRenderers.Add(bottleSlot.GetComponent<Image>());
             }
 
-            inventoryModel.ItemAdded += DisplayNewBottle;
+            inventoryModel.ItemAdded += DisplayAddedBottle;
             inventoryModel.ItemRemoved += RemoveBottleFromPanel;
         }
 
-        private void DisplayNewBottle(int i, Item bottle)
+        private void DisplayAddedBottle(int i, Item bottle)
         {
-            if (bottle is IItemColor)
-            {
-                bottleRenderers[i].color = ((IItemColor)bottle).ItemColor;
-            }
+            bottleRenderers[i].color = bottle.Color;
         }
 
         private void RemoveBottleFromPanel(int i, Item bootle)

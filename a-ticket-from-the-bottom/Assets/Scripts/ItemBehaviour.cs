@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Ticket.Items;
 using Ticket.Inventory;
+using Ticket.GeneralMovement;
 
 public class ItemBehaviour : MonoBehaviour, IClickable
 {

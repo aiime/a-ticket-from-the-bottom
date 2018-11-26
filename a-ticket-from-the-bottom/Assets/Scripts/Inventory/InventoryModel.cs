@@ -29,7 +29,7 @@ namespace Ticket.Inventory
             {
                 if (inventory[i] == null)
                 {
-                    inventory[i] = item.Clone() as Item;
+                    inventory[i] = item;
                     if (ItemAdded != null) ItemAdded.Invoke(i, item);
                     return;
                 }
@@ -40,7 +40,7 @@ namespace Ticket.Inventory
         {
             if (inventory[i] != null)
             {
-                Item removedItem = inventory[i].Clone() as Item;
+                Item removedItem = inventory[i];
                 inventory[i] = null;
 
                 if (ItemRemoved != null) ItemRemoved.Invoke(i, removedItem);

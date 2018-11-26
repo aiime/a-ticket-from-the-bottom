@@ -13,10 +13,7 @@ namespace Ticket.Inventory
         public void SaleItem()
         {
             Item soldItem = InventoryModel.RemoveItem(SlotNumber);
-            if (soldItem is ITradable)
-            {
-                UniversalsBehaviour.Universals += (soldItem as ITradable).Cost;
-            }
+            if (soldItem != null) UniversalsBehaviour.Universals += soldItem.Cost;
         }
     }
 }

@@ -3,13 +3,15 @@ using UnityEngine;
 
 namespace Ticket.Items
 {
-    public abstract class Item : MonoBehaviour, ICloneable
+    [Serializable]
+    public class Item
     {
-        public string Name { get; protected set; }
+        [SerializeField] string name;
+        [SerializeField] int cost;
+        [SerializeField] Color32 color;
 
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
+        public string Name { get { return name; } }
+        public int Cost { get { return cost; } }
+        public Color32 Color { get { return color; } }
     }
 }
