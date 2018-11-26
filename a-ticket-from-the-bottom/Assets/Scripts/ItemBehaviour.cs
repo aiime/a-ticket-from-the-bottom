@@ -1,50 +1,46 @@
-﻿using UnityEngine;
-using Ticket.Items;
-using Ticket.Inventory;
+﻿using System;
+using UnityEngine;
 using Ticket.GeneralMovement;
 
 public class ItemBehaviour : MonoBehaviour, IClickable
 {
-    public Mover mover;
-    public InventoryModel inventory;
-    public Transform playerTransform;
-    public Item item;
+    [SerializeField] Mover mover;
+    [SerializeField] Transform playerTransform;
+    [SerializeField] ControllRaycaster controllRaycaster;
 
-    private bool agentMovesToItem;
+    public Action ObjectReached;
+
+    private bool agentMovesToObject;
+
+    private void Awake()
+    {
+        controllRaycaster.ClickableObjects.Add(this.transform, this);
+    }
 
     public void OnClick(GameObject clickedObject, Vector3 clickPoint)
     {
         mover.MoveTo(clickedObject.transform.position);
-
-        agentMovesToItem = true;
-        mover.MovementEnd += AgentNoLongerMovesToItem;
+        agentMovesToObject = true;
+        mover.MovementEnd += AgentNoLongerMovesToObject;
     }
 
-    private void AgentNoLongerMovesToItem()
+    private void AgentNoLongerMovesToObject()
     {
-        agentMovesToItem = false;
-
-        mover.MovementEnd -= AgentNoLongerMovesToItem;
+        agentMovesToObject = false;
+        mover.MovementEnd -= AgentNoLongerMovesToObject;
     }
 
-    /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если предмет заспаунится прямо на герое, 
+    /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если объект заспаунится прямо на герое, 
        то OnTriggerEnter при щелчке по предмету не сработает. */
     private void OnTriggerStay(Collider other)
     {
-        if (agentMovesToItem && other.gameObject.tag == "Player")
+        if (agentMovesToObject && other.gameObject.tag == "Player")
         {
-            agentMovesToItem = false;
-
+            agentMovesToObject = false;
             mover.Stop();
             playerTransform.rotation = 
                 Quaternion.LookRotation(this.transform.position - playerTransform.position);
-            inventory.AddItem(item);
-            Destroy(transform.gameObject);
+            if (ObjectReached != null) ObjectReached.Invoke();
         }
-    }
-
-    private void OnDestroy()
-    {
-        mover.MovementEnd -= AgentNoLongerMovesToItem;
     }
 }

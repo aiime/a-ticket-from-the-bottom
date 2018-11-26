@@ -431,6 +431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mover: {fileID: 1378404105}
+  controllRaycaster: {fileID: 1615828043}
 --- !u!1 &120849588
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,6 +811,7 @@ MonoBehaviour:
   exchangeTransform: {fileID: 235648563}
   inventoryView: {fileID: 1826554001}
   inventoryCG: {fileID: 1826554002}
+  controllRaycaster: {fileID: 1615828043}
 --- !u!1 &251932327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,6 +1106,31 @@ Prefab:
       propertyPath: m_Name
       value: Bin 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: mover
+      value: 
+      objectReference: {fileID: 1378404105}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1378404102}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: controllRaycaster
+      value: 
+      objectReference: {fileID: 1615828043}
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: itemBehaviour
+      value: 
+      objectReference: {fileID: 1090100114}
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: inventoryModel
+      value: 
+      objectReference: {fileID: 1826554000}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_IsPrefabAsset: 0
@@ -1862,27 +1889,27 @@ MonoBehaviour:
     cost: 1
     color:
       serializedVersion: 2
-      rgba: 65285
+      rgba: 4278255365
   - name: Vodka bottle
     cost: 5
     color:
       serializedVersion: 2
-      rgba: 13750737
+      rgba: 4291940817
   - name: Wine bottle
     cost: 7
     color:
       serializedVersion: 2
-      rgba: 13762815
+      rgba: 4291952895
   - name: Jar
     cost: 14
     color:
       serializedVersion: 2
-      rgba: 16762368
+      rgba: 4294952448
   - name: Aluminum can
     cost: 20
     color:
       serializedVersion: 2
-      rgba: 255
+      rgba: 4278190335
 --- !u!4 &870650619
 Transform:
   m_ObjectHideFlags: 0
@@ -2144,6 +2171,12 @@ MonoBehaviour:
   - {fileID: 763671915}
   npcMover: {fileID: 1085431950}
   restTime: 2
+--- !u!114 &1090100114 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+    type: 2}
+  m_PrefabInternal: {fileID: 423304110}
+  m_Script: {fileID: 11500000, guid: 994893a715e3a394a96da8505376f29c, type: 3}
 --- !u!1 &1115848599
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,6 +2949,31 @@ Prefab:
       propertyPath: m_Name
       value: Bin 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: mover
+      value: 
+      objectReference: {fileID: 1378404105}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1378404102}
+    - target: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: controllRaycaster
+      value: 
+      objectReference: {fileID: 1615828043}
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: inventoryModel
+      value: 
+      objectReference: {fileID: 1826554000}
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: itemBehaviour
+      value: 
+      objectReference: {fileID: 1564101144}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_IsPrefabAsset: 0
@@ -3305,6 +3363,13 @@ MonoBehaviour:
   playerTransform: {fileID: 1378404102}
   shopTransform: {fileID: 1556938031}
   shopPanelCG: {fileID: 1259317803}
+  controllRaycaster: {fileID: 1615828043}
+--- !u!114 &1564101144 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
+    type: 2}
+  m_PrefabInternal: {fileID: 1468828897}
+  m_Script: {fileID: 11500000, guid: 994893a715e3a394a96da8505376f29c, type: 3}
 --- !u!1 &1584710229
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,12 @@ public class ShopBehaviour : MonoBehaviour, IClickable
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform shopTransform;
     [SerializeField] CanvasGroup shopPanelCG;
+    [SerializeField] ControllRaycaster controllRaycaster;
+
+    private void Awake()
+    {
+        controllRaycaster.ClickableObjects.Add(this.transform, this);
+    }
 
     public void OnClick(GameObject clickedObject, Vector3 clickPoint)
     {

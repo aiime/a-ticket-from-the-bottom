@@ -31,7 +31,8 @@ namespace Ticket.NPC
         private void GoToClosestBin()
         {
             npcMover.TargetReached += ThrowTrashInBin;
-            npcMover.MoveTo(FindClosestBin().transform.position);
+            GameObject closestBin = FindClosestBin();
+            if (closestBin != null) npcMover.MoveTo(closestBin.transform.position);
         }
 
         private void ThrowTrashInBin()
@@ -43,7 +44,7 @@ namespace Ticket.NPC
 
         private GameObject FindClosestBin()
         {
-            GameObject closestBin = new GameObject();
+            GameObject closestBin = null;
             float minPathLength = float.PositiveInfinity;
 
             foreach (GameObject bin in bins)

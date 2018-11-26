@@ -1,12 +1,21 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Ticket.Items;
+using Ticket.Inventory;
 
 namespace Ticket.Bin
 {
     public class BinBehaviour : MonoBehaviour
     {
+        [SerializeField] ItemBehaviour itemBehaviour;
+        [SerializeField] InventoryModel inventoryModel;
+
         private Stack<Item> itemsInside = new Stack<Item>();
+
+        private void Awake()
+        {
+            itemBehaviour.ObjectReached += () => GiveItem();
+        }
 
         public void ReceiveItem(Item item)
         {
@@ -14,16 +23,12 @@ namespace Ticket.Bin
             print("received: x1 [" + item.Name + "]");
         }
 
-        public List<Item> GiveItems(int itemsRequired)
+        public void GiveItem()
         {
-            List<Item> itemsToGive = new List<Item>();
-
-            for (int i = 0; (i < itemsRequired) && (i < itemsInside.Count); i++)
+            if (itemsInside.Count > 0)
             {
-                itemsToGive.Add(itemsInside.Pop());
+                inventoryModel.AddItem(itemsInside.Pop());
             }
-
-            return itemsToGive;
         }
     }
 }

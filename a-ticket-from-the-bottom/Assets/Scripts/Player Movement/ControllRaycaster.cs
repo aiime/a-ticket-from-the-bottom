@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ControllRaycaster : MonoBehaviour
 {
+    public Dictionary<Transform, IClickable> ClickableObjects = new Dictionary<Transform, IClickable>();
+
+    private IClickable clickable;
+
     private void Update()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -14,9 +19,9 @@ public class ControllRaycaster : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.tag == "Clickable")
+                if (ClickableObjects.TryGetValue(hit.transform, out clickable))
                 {
-                    hit.transform.GetComponent<IClickable>().OnClick(hit.transform.gameObject, hit.point);
+                    clickable.OnClick(hit.transform.gameObject, hit.point);
                 }
             }
         }

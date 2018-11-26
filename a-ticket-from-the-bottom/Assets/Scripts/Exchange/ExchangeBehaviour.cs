@@ -11,6 +11,12 @@ namespace Ticket.Click
         [SerializeField] private Transform exchangeTransform;
         [SerializeField] private InventoryView inventoryView;
         [SerializeField] private CanvasGroup inventoryCG;
+        [SerializeField] ControllRaycaster controllRaycaster;
+
+        private void Awake()
+        {
+            controllRaycaster.ClickableObjects.Add(this.transform, this);
+        }
 
         public void OnClick(GameObject clickedObject, Vector3 clickPoint)
         {
