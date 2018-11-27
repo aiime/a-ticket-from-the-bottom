@@ -4,6 +4,7 @@ using Ticket.GeneralMovement;
 
 namespace Ticket.NPC
 {
+    [AddComponentMenu("Ticket/NPC/Patrol behaviour")]
     public class PatrolBehaviour : MonoBehaviour
     {
         [SerializeField] Transform[] patrolPath;

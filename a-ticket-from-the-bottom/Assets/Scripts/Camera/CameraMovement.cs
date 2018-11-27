@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
 
-[ExecuteInEditMode]
-public class CameraMovement : MonoBehaviour
+namespace Ticket.Camera
 {
-    [SerializeField] private Transform heroTransform;
-    [SerializeField] Vector3 offset;
-
-    private void LateUpdate()
+    /// <summary>
+    /// Двигает камеру за игроком. Вешать на камеру.
+    /// </summary>
+    [ExecuteInEditMode]
+    [AddComponentMenu("Ticket/Camera/Camera movement")]
+    public class CameraMovement : MonoBehaviour
     {
-        transform.position = heroTransform.position + offset;
+        [SerializeField] private Transform playerTransform;
+        [SerializeField] Vector3 offset;
+
+        private void LateUpdate()
+        {
+            transform.position = playerTransform.position + offset;
+        }
     }
 }

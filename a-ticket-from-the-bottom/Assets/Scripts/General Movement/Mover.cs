@@ -5,6 +5,10 @@ using UnityEngine.AI;
 
 namespace Ticket.GeneralMovement
 {
+    /// <summary>
+    /// Двигает произвольного агента с помощью открытого метода MoveTo. Имеет события, сообщающие о 
+    /// статусе движения.
+    /// </summary>
     [AddComponentMenu("Ticket/General Movement/Mover")]
     public class Mover : MonoBehaviour
     {
@@ -18,7 +22,6 @@ namespace Ticket.GeneralMovement
         public Action TargetReached;
 
         private bool inMotion;
-        // private Coroutine waitForMovementEndCoroutine;
 
         private void Start()
         {

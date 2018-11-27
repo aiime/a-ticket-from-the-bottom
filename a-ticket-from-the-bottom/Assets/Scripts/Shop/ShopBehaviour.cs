@@ -1,70 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Ticket.GeneralMovement;
+using Ticket.PlayerMovement;
 
-public class ShopBehaviour : MonoBehaviour, IClickable
+namespace Ticket.Shop
 {
-    [SerializeField] Mover playerMover;
-    [SerializeField] Transform playerTransform;
-    [SerializeField] Transform shopTransform;
-    [SerializeField] CanvasGroup shopPanelCG;
-    [SerializeField] ControllRaycaster controllRaycaster;
-
-    private void Awake()
+    [AddComponentMenu("Ticket/Shop/Shop behaviour")]
+    public class ShopBehaviour : MonoBehaviour, IClickable
     {
-        controllRaycaster.ClickableObjects.Add(this.transform, this);
-    }
+        [SerializeField] Mover playerMover;
+        [SerializeField] Transform playerTransform;
+        [SerializeField] Transform shopTransform;
+        [SerializeField] CanvasGroup shopPanelCG;
+        [SerializeField] ControllRaycaster controllRaycaster;
 
-    public void OnClick(GameObject clickedObject, Vector3 clickPoint)
-    {
-        playerMover.MoveTo(clickedObject.transform.position);
+        private void Awake()
+        {
+            controllRaycaster.ClickableObjects.Add(this.transform, this);
+        }
 
-        playerMover.MovementEnd += PlayerNoLongerMovesToShop;
-        playerMover.TargetReached += PlayerReachedShop;
-    }
+        public void OnClick(GameObject clickedObject, Vector3 clickPoint)
+        {
+            playerMover.MoveTo(clickedObject.transform.position);
 
-    private void PlayerNoLongerMovesToShop()
-    {
-        playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-        playerMover.TargetReached -= PlayerReachedShop;
-    }
+            playerMover.MovementEnd += PlayerNoLongerMovesToShop;
+            playerMover.TargetReached += PlayerReachedShop;
+        }
 
-    private void PlayerReachedShop()
-    {
-        playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-        playerMover.TargetReached -= PlayerReachedShop;
+        private void PlayerNoLongerMovesToShop()
+        {
+            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
+            playerMover.TargetReached -= PlayerReachedShop;
+        }
 
-        Quaternion rotationTowardShop =
-            Quaternion.LookRotation(shopTransform.position - playerTransform.position);
+        private void PlayerReachedShop()
+        {
+            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
+            playerMover.TargetReached -= PlayerReachedShop;
 
-        // Нужно, чтобы модель игрока просто развернулась по 'y' в сторону окна магазина, а не задиралась
-        // дополнительно вверх по 'x' и 'z' по навравлению в центр окна. Поэтому обнуляем их.
-        rotationTowardShop.x = 0;
-        rotationTowardShop.z = 0;
+            Quaternion rotationTowardShop =
+                Quaternion.LookRotation(shopTransform.position - playerTransform.position);
 
-        playerTransform.rotation = rotationTowardShop;
+            // Нужно, чтобы модель игрока просто развернулась по 'y' в сторону окна магазина, а не задиралась
+            // дополнительно вверх по 'x' и 'z' по навравлению в центр окна. Поэтому обнуляем их.
+            rotationTowardShop.x = 0;
+            rotationTowardShop.z = 0;
 
-        ActivateShopMode();
-    }
+            playerTransform.rotation = rotationTowardShop;
 
-    private void ActivateShopMode()
-    {
-        playerMover.MovementStart += PlayerLeavesShop;
+            ActivateShopMode();
+        }
 
-        shopPanelCG.alpha = 1;
-        shopPanelCG.blocksRaycasts = true;
-    }
+        private void ActivateShopMode()
+        {
+            playerMover.MovementStart += PlayerLeavesShop;
 
-    private void PlayerLeavesShop()
-    {
-        playerMover.MovementStart -= PlayerLeavesShop;
-        DeactivateShopMode();
-    }
+            shopPanelCG.alpha = 1;
+            shopPanelCG.blocksRaycasts = true;
+        }
 
-    private void DeactivateShopMode()
-    {
-        shopPanelCG.alpha = 0;
-        shopPanelCG.blocksRaycasts = false;
+        private void PlayerLeavesShop()
+        {
+            playerMover.MovementStart -= PlayerLeavesShop;
+            DeactivateShopMode();
+        }
+
+        private void DeactivateShopMode()
+        {
+            shopPanelCG.alpha = 0;
+            shopPanelCG.blocksRaycasts = false;
+        }
     }
 }

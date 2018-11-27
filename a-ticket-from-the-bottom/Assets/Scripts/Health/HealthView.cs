@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Ticket.Health
 {
-    [AddComponentMenu("Ticket/Health/Health View")]
+    [AddComponentMenu("Ticket/Health/Health view")]
     public class HealthView : MonoBehaviour
     {
         [SerializeField] HealthModel healthModel;
@@ -20,4 +20,3 @@ namespace Ticket.Health
         }
     }
 }
-

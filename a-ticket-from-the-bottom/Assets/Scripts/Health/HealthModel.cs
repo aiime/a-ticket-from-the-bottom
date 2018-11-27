@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Ticket.Health
 {
-    [AddComponentMenu("Ticket/Health/Health Model")]
+    [AddComponentMenu("Ticket/Health/Health model")]
     public class HealthModel : MonoBehaviour
     {
         public int Health

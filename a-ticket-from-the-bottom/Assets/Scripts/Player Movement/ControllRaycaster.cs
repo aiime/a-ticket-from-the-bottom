@@ -2,26 +2,33 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ControllRaycaster : MonoBehaviour
+namespace Ticket.PlayerMovement
 {
-    public Dictionary<Transform, IClickable> ClickableObjects = new Dictionary<Transform, IClickable>();
-
-    private IClickable clickable;
-
-    private void Update()
+    /// <summary>
+    /// Выпускает райкасты по клику мыши и вызывает на встречных объектах метод OnClick.
+    /// </summary>
+    [AddComponentMenu("Ticket/Player movement/Controll raycaster")]
+    public class ControllRaycaster : MonoBehaviour
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        public Dictionary<Transform, IClickable> ClickableObjects = new Dictionary<Transform, IClickable>();
 
-        if (Input.GetMouseButtonDown(0))
+        private IClickable clickable;
+
+        private void Update()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
+            if (EventSystem.current.IsPointerOverGameObject()) return;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetMouseButtonDown(0))
             {
-                if (ClickableObjects.TryGetValue(hit.transform, out clickable))
+                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit = new RaycastHit();
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    clickable.OnClick(hit.transform.gameObject, hit.point);
+                    if (ClickableObjects.TryGetValue(hit.transform, out clickable))
+                    {
+                        clickable.OnClick(hit.transform.gameObject, hit.point);
+                    }
                 }
             }
         }

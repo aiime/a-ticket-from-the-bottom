@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using Ticket.Health;
+using Ticket.Universals;
 
-public class ShopBreadBehaviour : MonoBehaviour
+namespace Ticket.Shop
 {
-    [SerializeField] UniversalsModel universalsModel;
-    [SerializeField] HealthModel healthModel;
-
-    public void BuyBread()
+    [AddComponentMenu("Ticket/Shop/Shop bread behaviour")]
+    public class ShopBreadBehaviour : MonoBehaviour
     {
-        if (universalsModel.Universals >= 30)
+        [SerializeField] UniversalsModel universalsModel;
+        [SerializeField] HealthModel healthModel;
+
+        public void BuyBread()
         {
-            universalsModel.Universals -= 30;
-            healthModel.Health += 40;
+            if (universalsModel.Universals >= 30)
+            {
+                universalsModel.Universals -= 30;
+                healthModel.Health += 40;
+            }
         }
     }
 }

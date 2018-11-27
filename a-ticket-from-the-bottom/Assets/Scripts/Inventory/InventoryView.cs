@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Ticket.Items;
+using Ticket.Universals;
 
 namespace Ticket.Inventory
 {

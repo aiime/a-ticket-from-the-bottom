@@ -7,6 +7,10 @@ using Ticket.GeneralMovement;
 
 namespace Ticket.NPC
 {
+    /// <summary>
+    /// Отвечает за поведение НИПа касательно выбрасывания мусора.
+    /// </summary>
+    [AddComponentMenu("Ticket/NPC/Garbage disposal behaviour")]
     public class GarbageDisposalBehaviour : MonoBehaviour
     {
         [SerializeField] Mover npcMover;

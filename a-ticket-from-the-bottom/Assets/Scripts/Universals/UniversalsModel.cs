@@ -1,60 +1,65 @@
 ﻿using System;
 using UnityEngine;
 
-/// <summary>
-/// Через этот скрипт устанавливается количество универсалов, которыми обладает игрок, а также извлекается
-/// их текущее значение.
-/// </summary>
-public class UniversalsModel : MonoBehaviour
+namespace Ticket.Universals
 {
-    public int Universals
+    /// <summary>
+    /// Через этот скрипт устанавливается количество универсалов, которыми обладает игрок, а также извлекается
+    /// их текущее значение.
+    /// </summary>
+    [AddComponentMenu("Ticket/Universals/Universals model")]
+    public class UniversalsModel : MonoBehaviour
     {
-        get
+        public int Universals
         {
-            return universals;
+            get
+            {
+                return universals;
+            }
+
+            set
+            {
+                if (value < 0)
+                {
+                    int removedAmount = universals;
+                    universals = 0;
+
+                    if (UniversalsRemoved != null) UniversalsRemoved.Invoke(removedAmount);
+                }
+
+                else if (value > 999)
+                {
+                    int addedAmount = 999 - universals;
+                    universals = 999;
+
+                    if (UniversalsAdded != null) UniversalsAdded.Invoke(addedAmount);
+                }
+
+                else if (value > universals)
+                {
+                    int addedAmount = value - universals;
+                    universals = value;
+
+                    if (UniversalsAdded != null) UniversalsAdded.Invoke(addedAmount);
+                }
+
+                else if (value < universals)
+                {
+                    int removedAmount = universals - value;
+                    universals = value;
+
+                    if (UniversalsRemoved != null) UniversalsRemoved.Invoke(removedAmount);
+                }
+
+                if (UniversalsChanged != null) UniversalsChanged.Invoke(universals);
+            }
         }
 
-        set
-        {
-            if (value < 0)
-            {
-                int removedAmount = universals;
-                universals = 0;
+        public Action<int> UniversalsAdded;
+        public Action<int> UniversalsRemoved;
+        public Action<int> UniversalsChanged;
 
-                if (UniversalsRemoved != null) UniversalsRemoved.Invoke(removedAmount);
-            }
-
-            else if (value > 999)
-            {
-                int addedAmount = 999 - universals;
-                universals = 999;
-
-                if (UniversalsAdded != null) UniversalsAdded.Invoke(addedAmount);
-            }
-
-            else if (value > universals)
-            {
-                int addedAmount = value - universals;
-                universals = value;
-
-                if (UniversalsAdded != null) UniversalsAdded.Invoke(addedAmount);
-            }
-
-            else if (value < universals)
-            {
-                int removedAmount = universals - value;
-                universals = value;
-
-                if (UniversalsRemoved != null) UniversalsRemoved.Invoke(removedAmount);
-            }
-
-            if (UniversalsChanged != null) UniversalsChanged.Invoke(universals);
-        }
+        private int universals;
     }
 
-    public Action<int> UniversalsAdded;
-    public Action<int> UniversalsRemoved;
-    public Action<int> UniversalsChanged;
-
-    private int universals;
 }

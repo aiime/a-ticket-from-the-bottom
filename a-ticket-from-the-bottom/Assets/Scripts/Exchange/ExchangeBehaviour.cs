@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using Ticket.Inventory;
 using Ticket.GeneralMovement;
+using Ticket.PlayerMovement;
 
 namespace Ticket.Click
 {
+    [AddComponentMenu("Ticket/Exchange/Exchange behaviour")]
     public class ExchangeBehaviour : MonoBehaviour, IClickable
     {
         [SerializeField] private Mover playerMover;

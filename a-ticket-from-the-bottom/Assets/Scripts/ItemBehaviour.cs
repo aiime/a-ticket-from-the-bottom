@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using Ticket.GeneralMovement;
+using Ticket.PlayerMovement;
 
-public class ItemBehaviour : MonoBehaviour, IClickable
+public class MovementTarget : MonoBehaviour, IClickable
 {
     [SerializeField] Mover mover;
     [SerializeField] Transform playerTransform;

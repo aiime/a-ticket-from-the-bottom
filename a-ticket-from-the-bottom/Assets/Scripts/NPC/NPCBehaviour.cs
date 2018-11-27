@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Ticket.NPC
 {
+    /// <summary>
+    /// Отсюда регулируются все поведения НИПа.
+    /// </summary>
+    [AddComponentMenu("Ticket/NPC/NPC behaviour")]
     public class NPCBehaviour : MonoBehaviour
     {
         [SerializeField] PatrolBehaviour patrolBehaviour;

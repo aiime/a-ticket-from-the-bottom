@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Вешается на объекты, которые должен регестрировать ControllRaycaster.
+/// </summary>
 public interface IClickable
 {
     /// <summary>
