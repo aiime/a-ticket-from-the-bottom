@@ -460,6 +460,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &135678648 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1262375082091662, guid: e41d19f95adaae04186de834bfd5b769,
+    type: 2}
+  m_PrefabInternal: {fileID: 1468828897}
+--- !u!114 &135678653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 135678648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b33c16ea91e499c25e38675ee448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 1378404105}
+  playerTransform: {fileID: 1378404102}
+  controllRaycaster: {fileID: 1615828043}
 --- !u!1001 &146034148
 Prefab:
   m_ObjectHideFlags: 0
@@ -1192,7 +1211,7 @@ Prefab:
         type: 2}
       propertyPath: itemBehaviour
       value: 
-      objectReference: {fileID: 1090100114}
+      objectReference: {fileID: 0}
     - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
         type: 2}
       propertyPath: inventoryModel
@@ -1202,7 +1221,13 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: movementTarget
+      value: 
+      objectReference: {fileID: 1497446550}
+    m_RemovedComponents:
+    - {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &433702005
@@ -1417,7 +1442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75efb0658126ff148a70391572608a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
+  playerTransform: {fileID: 1378404102}
   offset: {x: 0, y: 18, z: -20}
 --- !u!4 &539119546 stripped
 Transform:
@@ -2242,12 +2267,6 @@ MonoBehaviour:
   - {fileID: 763671915}
   npcMover: {fileID: 1085431950}
   restTime: 2
---- !u!114 &1090100114 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
-    type: 2}
-  m_PrefabInternal: {fileID: 423304110}
-  m_Script: {fileID: 11500000, guid: 994893a715e3a394a96da8505376f29c, type: 3}
 --- !u!1 &1115848599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3044,12 +3063,18 @@ Prefab:
         type: 2}
       propertyPath: itemBehaviour
       value: 
-      objectReference: {fileID: 1564101144}
+      objectReference: {fileID: 0}
     - target: {fileID: 1262375082091662, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114787516248493970, guid: e41d19f95adaae04186de834bfd5b769,
+        type: 2}
+      propertyPath: movementTarget
+      value: 
+      objectReference: {fileID: 135678653}
+    m_RemovedComponents:
+    - {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: e41d19f95adaae04186de834bfd5b769, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1472165557
@@ -3154,6 +3179,25 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1 &1497446545 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1262375082091662, guid: e41d19f95adaae04186de834bfd5b769,
+    type: 2}
+  m_PrefabInternal: {fileID: 423304110}
+--- !u!114 &1497446550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1497446545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b33c16ea91e499c25e38675ee448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 1378404105}
+  playerTransform: {fileID: 1378404102}
+  controllRaycaster: {fileID: 1615828043}
 --- !u!1 &1529512917
 GameObject:
   m_ObjectHideFlags: 0
@@ -3439,12 +3483,6 @@ MonoBehaviour:
   shopTransform: {fileID: 1556938031}
   shopPanelCG: {fileID: 1259317803}
   controllRaycaster: {fileID: 1615828043}
---- !u!114 &1564101144 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114777550503437870, guid: e41d19f95adaae04186de834bfd5b769,
-    type: 2}
-  m_PrefabInternal: {fileID: 1468828897}
-  m_Script: {fileID: 11500000, guid: 994893a715e3a394a96da8505376f29c, type: 3}
 --- !u!1 &1584710229
 GameObject:
   m_ObjectHideFlags: 0

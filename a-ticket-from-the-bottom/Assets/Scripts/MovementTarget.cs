@@ -3,6 +3,7 @@ using UnityEngine;
 using Ticket.GeneralMovement;
 using Ticket.PlayerMovement;
 
+[AddComponentMenu("Ticket/Movement target")]
 public class MovementTarget : MonoBehaviour, IClickable
 {
     [SerializeField] Mover mover;

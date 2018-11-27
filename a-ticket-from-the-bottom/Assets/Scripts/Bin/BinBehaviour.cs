@@ -8,14 +8,14 @@ namespace Ticket.Bin
     [AddComponentMenu("Ticket/Bin/Bin behaviour")]
     public class BinBehaviour : MonoBehaviour
     {
-        [SerializeField] MovementTarget itemBehaviour;
+        [SerializeField] MovementTarget movementTarget;
         [SerializeField] InventoryModel inventoryModel;
 
         private Stack<Item> itemsInside = new Stack<Item>();
 
         private void Awake()
         {
-            itemBehaviour.ObjectReached += () => GiveItem();
+            movementTarget.ObjectReached += () => GiveItem();
         }
 
         public void ReceiveItem(Item item)
