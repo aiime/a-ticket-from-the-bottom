@@ -16,14 +16,13 @@ namespace Ticket.NPC
 
         public void StartPatrol()
         {
-            npcMover.TargetReached += RestThenMoveFurther;
+            npcMover.ReachedDestination += RestThenMoveFurther;
             npcMover.MoveTo(patrolPath[patrolPointIndex].position);
         }
 
         public void StopPatrol()
         {
-            npcMover.TargetReached -= RestThenMoveFurther;
-            npcMover.Stop();
+            npcMover.ReachedDestination -= RestThenMoveFurther;
             if (restThenMoveCoroutine != null) StopCoroutine(restThenMoveCoroutine);
         }
 

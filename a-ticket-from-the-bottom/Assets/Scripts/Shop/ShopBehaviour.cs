@@ -15,27 +15,20 @@ namespace Ticket.Shop
 
         private void Awake()
         {
-            controllRaycaster.ClickableObjects.Add(this.transform, this);
+            //controllRaycaster.ClickableObjects.Add(this.transform, this);
         }
 
         public void OnClick(GameObject clickedObject, Vector3 clickPoint)
         {
             playerMover.MoveTo(clickedObject.transform.position);
 
-            playerMover.MovementEnd += PlayerNoLongerMovesToShop;
-            playerMover.TargetReached += PlayerReachedShop;
+            playerMover.ReachedDestination += PlayerReachedShop;
         }
 
-        private void PlayerNoLongerMovesToShop()
-        {
-            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-            playerMover.TargetReached -= PlayerReachedShop;
-        }
 
         private void PlayerReachedShop()
         {
-            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-            playerMover.TargetReached -= PlayerReachedShop;
+            playerMover.ReachedDestination -= PlayerReachedShop;
 
             Quaternion rotationTowardShop =
                 Quaternion.LookRotation(shopTransform.position - playerTransform.position);
@@ -52,7 +45,7 @@ namespace Ticket.Shop
 
         private void ActivateShopMode()
         {
-            playerMover.MovementStart += PlayerLeavesShop;
+            playerMover.WentToDestination += PlayerLeavesShop;
 
             shopPanelCG.alpha = 1;
             shopPanelCG.blocksRaycasts = true;
@@ -60,7 +53,7 @@ namespace Ticket.Shop
 
         private void PlayerLeavesShop()
         {
-            playerMover.MovementStart -= PlayerLeavesShop;
+            playerMover.WentToDestination -= PlayerLeavesShop;
             DeactivateShopMode();
         }
 

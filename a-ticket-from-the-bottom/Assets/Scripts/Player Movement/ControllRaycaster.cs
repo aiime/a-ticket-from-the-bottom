@@ -1,36 +1,58 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Ticket.GeneralMovement;
+using Pathfinding;
 
 namespace Ticket.PlayerMovement
 {
     /// <summary>
     /// Выпускает райкасты по клику мыши и вызывает на встречных объектах метод OnClick.
     /// </summary>
+    [RequireComponent(typeof(Mover))]
     [AddComponentMenu("Ticket/Player movement/Controll raycaster")]
     public class ControllRaycaster : MonoBehaviour
     {
-        public Dictionary<Transform, IClickable> ClickableObjects = new Dictionary<Transform, IClickable>();
+        Mover playerMover;
+        bool hitGround;
 
-        private IClickable clickable;
-
-        private void Update()
+        private void Awake()
         {
-            if (EventSystem.current.IsPointerOverGameObject()) return;
+            playerMover = GetComponent<Mover>();
+        }
 
-            if (Input.GetMouseButtonDown(0))
+        void Update()
+        {
+            if (Input.GetMouseButtonUp(1))
             {
-                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit = new RaycastHit();
+                if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                if (Physics.Raycast(ray, out hit))
+                RaycastHit hit = RaycastGround();
+
+                if (hitGround)
                 {
-                    if (ClickableObjects.TryGetValue(hit.transform, out clickable))
-                    {
-                        clickable.OnClick(hit.transform.gameObject, hit.point);
-                    }
+                    MovePlayer(hit);
                 }
-            }
+            }   
+        }
+
+        /// <summary>
+        /// Возвращает <see cref="RaycastHit"/> по месту попадания. Если попал по земле, то поднимет флаг 
+        /// <see cref="hitGround"/>, а иначе опустит.
+        /// </summary>
+        RaycastHit RaycastGround()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
+
+            hitGround = Physics.Raycast(ray, out hit, float.PositiveInfinity, 1 << LayerMask.NameToLayer("Ground"));
+
+            return hit;
+        }
+
+        void MovePlayer(RaycastHit hit)
+        {
+            playerMover.MoveTo(hit.point);
         }
     }
 }

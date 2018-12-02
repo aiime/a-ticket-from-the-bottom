@@ -1,76 +1,61 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using Pathfinding;
 
 namespace Ticket.GeneralMovement
 {
     /// <summary>
-    /// Двигает произвольного агента с помощью открытого метода MoveTo. Имеет события, сообщающие о 
-    /// статусе движения.
+    /// Двигает объект с помощью метода <see cref="MoveTo(Vector3)"/>. Имеет события <see cref="WentToDestination"/> и
+    /// <see cref="ReachedDestination"/>, сообщающие о статусе движения.
     /// </summary>
+    [RequireComponent(typeof(AIPath))]
+    [RequireComponent(typeof(Seeker))]
     [AddComponentMenu("Ticket/General Movement/Mover")]
     public class Mover : MonoBehaviour
     {
-        [SerializeField] private float speed;
+        [SerializeField] float speed;
 
-        public NavMeshAgent agent;
-        public Transform agentTransform;
+        public Action WentToDestination;
+        public Action ReachedDestination;
 
-        public Action MovementStart;
-        public Action MovementEnd;
-        public Action TargetReached;
+        AIPath ai;
+        Seeker seeker;
+        bool aiMoves;
 
-        private bool inMotion;
-
-        private void Start()
+        void Awake()
         {
-            agent.speed = speed;
-            agent.acceleration = 60;
-            agent.updateRotation = false;
+            ai = GetComponent<AIPath>();
+            seeker = GetComponent<Seeker>();
         }
 
-        private void Update()
+        public void MoveTo(Vector3 destination)
         {
-            if (inMotion && agent.velocity.sqrMagnitude > Mathf.Epsilon)
-            {
-                agentTransform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
-            }
+            if (aiMoves) return;
+
+            aiMoves = true;
+            ai.canMove = true;
+            ai.destination = destination;
+            ai.SearchPath();
+            StartCoroutine(WaitForPathComplete());
         }
 
-        public void MoveTo(Vector3 point)
+        IEnumerator WaitForPathComplete()
         {
-            if (inMotion)
-            {
-                if (MovementEnd != null) MovementEnd.Invoke();
-            }
-            else
-            {
-                inMotion = true;
-            }
-            agent.isStopped = false;
-            agent.SetDestination(point);
-            StartCoroutine(WaitForMovementEnd());
-            if (MovementStart != null) MovementStart.Invoke();
+            while (ai.pathPending) yield return null;
+
+            if (WentToDestination != null) WentToDestination.Invoke();
+            StartCoroutine(WaitForDestinationReached());
         }
 
-        public void Stop()
+        IEnumerator WaitForDestinationReached()
         {
-            if (MovementEnd != null) MovementEnd.Invoke();
-            agent.isStopped = true;
-            inMotion = false;
-        }
+            while (!ai.reachedEndOfPath) yield return null;
 
-        IEnumerator WaitForMovementEnd()
-        {
-            while (Vector3.Distance(agentTransform.position, agent.destination) > agent.stoppingDistance)
-            {
-                yield return null;
-            }
-
-            inMotion = false;
-            if (TargetReached != null) TargetReached.Invoke();
+            aiMoves = false;
+            ai.canMove = false;
+            if (ReachedDestination != null) ReachedDestination.Invoke();
         }
     }
-
 }

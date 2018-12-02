@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace Ticket.Camera
+namespace Ticket.Cam
 {
     /// <summary>
-    /// Двигает камеру за игроком. Вешать на камеру.
+    /// Двигает камеру за игроком со смещение <see cref="offset"/>. Вешать на камеру.
     /// </summary>
     [ExecuteInEditMode]
     [AddComponentMenu("Ticket/Camera/Camera movement")]
@@ -14,7 +14,7 @@ namespace Ticket.Camera
 
         private void LateUpdate()
         {
-            transform.position = playerTransform.position + offset;
+            transform.localPosition = playerTransform.position + offset;
         }
     }
 }

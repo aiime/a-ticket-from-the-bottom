@@ -14,7 +14,7 @@ namespace Ticket.PlayerMovement
 
         private void Awake()
         {
-            controllRaycaster.ClickableObjects.Add(this.transform, this);
+            //controllRaycaster.ClickableObjects.Add(this.transform, this);
         }
 
         public void OnClick(GameObject obj, Vector3 point)

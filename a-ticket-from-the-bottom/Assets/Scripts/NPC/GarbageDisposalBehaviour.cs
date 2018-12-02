@@ -34,14 +34,14 @@ namespace Ticket.NPC
 
         private void GoToClosestBin()
         {
-            npcMover.TargetReached += ThrowTrashInBin;
+            npcMover.ReachedDestination += ThrowTrashInBin;
             GameObject closestBin = FindClosestBin();
             if (closestBin != null) npcMover.MoveTo(closestBin.transform.position);
         }
 
         private void ThrowTrashInBin()
         {
-            npcMover.TargetReached -= ThrowTrashInBin;
+            npcMover.ReachedDestination -= ThrowTrashInBin;
             binBehaviour.ReceiveItem(itemDB.GetItem(UnityEngine.Random.Range(0, 5)));
             if (garbageDisposed != null) garbageDisposed.Invoke();
         }

@@ -6,7 +6,7 @@ namespace Ticket.Shop
     /// Двигает UI панель магазина, чтобы она всегда весела над ним. Камера для отрисовки панели магазина
     /// находится в режиме оверлея, поэтому приходится так делать.
     /// </summary>
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     [AddComponentMenu("Ticket/Shop/Shop panel positioner")]
     public class ShopPanelPositioner : MonoBehaviour
     {

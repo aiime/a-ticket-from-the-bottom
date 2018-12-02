@@ -17,27 +17,19 @@ namespace Ticket.Click
 
         private void Awake()
         {
-            controllRaycaster.ClickableObjects.Add(this.transform, this);
+            //controllRaycaster.ClickableObjects.Add(this.transform, this);
         }
 
         public void OnClick(GameObject clickedObject, Vector3 clickPoint)
         {
             playerMover.MoveTo(clickedObject.transform.position);
 
-            playerMover.MovementEnd += PlayerNoLongerMovesToShop;
-            playerMover.TargetReached += PlayerReachedShop;
-        }
-
-        private void PlayerNoLongerMovesToShop()
-        {
-            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-            playerMover.TargetReached -= PlayerReachedShop;
+            playerMover.ReachedDestination += PlayerReachedShop;
         }
 
         private void PlayerReachedShop()
         {
-            playerMover.MovementEnd -= PlayerNoLongerMovesToShop;
-            playerMover.TargetReached -= PlayerReachedShop;
+            playerMover.ReachedDestination -= PlayerReachedShop;
 
             Quaternion rotationTowardExchange = 
                 Quaternion.LookRotation(exchangeTransform.position - playerTransform.position);
@@ -55,12 +47,12 @@ namespace Ticket.Click
         private void ActivateExchangeMode()
         {
             inventoryCG.interactable = true;
-            playerMover.MovementStart += PlayerLeavesShop;
+            playerMover.WentToDestination += PlayerLeavesShop;
         }
 
         private void PlayerLeavesShop()
         {
-            playerMover.MovementStart -= PlayerLeavesShop;
+            playerMover.WentToDestination -= PlayerLeavesShop;
             DeactivateExchangeMode();
         }
 

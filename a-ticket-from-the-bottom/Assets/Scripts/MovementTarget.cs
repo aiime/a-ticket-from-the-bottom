@@ -16,20 +16,13 @@ public class MovementTarget : MonoBehaviour, IClickable
 
     private void Awake()
     {
-        controllRaycaster.ClickableObjects.Add(this.transform, this);
+        //controllRaycaster.ClickableObjects.Add(this.transform, this);
     }
 
     public void OnClick(GameObject clickedObject, Vector3 clickPoint)
     {
         mover.MoveTo(clickedObject.transform.position);
         agentMovesToObject = true;
-        mover.MovementEnd += AgentNoLongerMovesToObject;
-    }
-
-    private void AgentNoLongerMovesToObject()
-    {
-        agentMovesToObject = false;
-        mover.MovementEnd -= AgentNoLongerMovesToObject;
     }
 
     /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если объект заспаунится прямо на герое, 
@@ -39,7 +32,6 @@ public class MovementTarget : MonoBehaviour, IClickable
         if (agentMovesToObject && other.gameObject.tag == "Player")
         {
             agentMovesToObject = false;
-            mover.Stop();
             playerTransform.rotation = 
                 Quaternion.LookRotation(this.transform.position - playerTransform.position);
             if (ObjectReached != null) ObjectReached.Invoke();
