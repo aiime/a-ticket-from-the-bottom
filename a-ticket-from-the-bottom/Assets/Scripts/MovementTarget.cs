@@ -9,6 +9,9 @@ namespace Ticket.GeneralMovement
         [SerializeField] Mover mover;
         [SerializeField] Transform aiTransform;
 
+        public bool hasAlternativeDestination;
+        [HideInInspector] public Transform alternativeDestination;
+
         public Action TargetReached;
 
         bool subscribed;

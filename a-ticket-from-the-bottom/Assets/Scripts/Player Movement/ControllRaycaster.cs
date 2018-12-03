@@ -30,7 +30,14 @@ namespace Ticket.PlayerMovement
                 {
                     MovementTarget movementTarget = hit.transform.gameObject.GetComponent<MovementTarget>();
                     movementTarget.WaitForArrival();
-                    playerMover.MoveTo(movementTarget);
+                    if (movementTarget.hasAlternativeDestination)
+                    {
+                        playerMover.MoveTo(movementTarget.alternativeDestination.position);
+                    }
+                    else
+                    {
+                        playerMover.MoveTo(movementTarget);
+                    } 
                 }
 
                 if (hit.transform.tag == "Ground")

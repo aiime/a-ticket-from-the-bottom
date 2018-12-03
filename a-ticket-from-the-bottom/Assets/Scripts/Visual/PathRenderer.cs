@@ -45,6 +45,7 @@ namespace Ticket.Visual
             playerSeeker.pathCallback += RenderPath;
         }
 
+        //MovementTarget movementTarget;
         void Update()
         {
             if (Input.GetMouseButton(1) && !playerAI.canMove && !waitForRender)
@@ -67,8 +68,19 @@ namespace Ticket.Visual
                 {
                     waitForRender = true;
                     pointer.gameObject.SetActive(false);
-                    playerAI.destination = hit.transform.position;
-                    playerAI.SearchPath();
+
+                    MovementTarget movementTarget = hit.transform.GetComponent<MovementTarget>();
+                    if (movementTarget.hasAlternativeDestination)
+                    {
+                        playerAI.destination = movementTarget.alternativeDestination.position;
+                        playerAI.SearchPath();
+                    }
+                    else
+                    {
+                        playerAI.destination = hit.transform.position;
+                        playerAI.SearchPath();
+                    }
+ 
                     // Дальше, как только ИИ вычислит путь, сработает 'pathCallback', и запустится подписанный на него 
                     // метод 'RenderPath', который отрисует путь.
                 }

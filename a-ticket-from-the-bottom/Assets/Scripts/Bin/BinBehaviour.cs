@@ -28,7 +28,6 @@ namespace Ticket.Bin
         public void ReceiveItem(Item item)
         {
             itemsInside.Push(item);
-            print("received: x1[" + item.Name + "]");
         }
 
         public void GiveItem()
