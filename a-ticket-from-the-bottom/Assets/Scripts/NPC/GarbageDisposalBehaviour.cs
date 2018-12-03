@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using Ticket.Bin;
 using Ticket.Items;
 using Ticket.GeneralMovement;
+using Pathfinding;
 
 namespace Ticket.NPC
 {
@@ -14,72 +16,96 @@ namespace Ticket.NPC
     public class GarbageDisposalBehaviour : MonoBehaviour
     {
         [SerializeField] Mover npcMover;
-        [SerializeField] NavMeshAgent npcAgent;
         [SerializeField] ItemDB itemDB;
+        [SerializeField] AIPath binsSearchingAI;
+        [SerializeField] Seeker binsSearchingSeeker;
 
         public Action garbageDisposed;
 
-        private GameObject[] bins;
-        private BinBehaviour binBehaviour;
+        BinBehaviour[] bins;
+        BinBehaviour closestBin;
+        Dictionary<BinBehaviour, float> pathLengthByBin = new Dictionary<BinBehaviour, float>();
+        bool fillPathLegthsDictionary_CR_running;
 
-        private void Awake()
+        void Awake()
         {
-            bins = GameObject.FindGameObjectsWithTag("Bin");
+            bins = FindObjectsOfType<BinBehaviour>();
+            binsSearchingSeeker.pathCallback += (path) => pathToBin = path;
         }
 
         public void DisposeTrash()
         {
-            GoToClosestBin();
+            StartCoroutine(GoToClosestBin());
         }
 
-        private void GoToClosestBin()
+        IEnumerator GoToClosestBin()
         {
-            npcMover.ReachedDestination += ThrowTrashInBin;
-            GameObject closestBin = FindClosestBin();
-            if (closestBin != null) npcMover.MoveTo(closestBin.transform.position);
-        }
+            fillPathLegthsDictionary_CR_running = true;
+            StartCoroutine(FillPathLengthsDictionary());
 
-        private void ThrowTrashInBin()
-        {
-            npcMover.ReachedDestination -= ThrowTrashInBin;
-            binBehaviour.ReceiveItem(itemDB.GetItem(UnityEngine.Random.Range(0, 5)));
-            if (garbageDisposed != null) garbageDisposed.Invoke();
-        }
+            yield return new WaitWhile(() => fillPathLegthsDictionary_CR_running == true);
 
-        private GameObject FindClosestBin()
-        {
-            GameObject closestBin = null;
+            BinBehaviour currentClosestBin = null;
             float minPathLength = float.PositiveInfinity;
 
-            foreach (GameObject bin in bins)
+            foreach (KeyValuePair<BinBehaviour, float> entry in pathLengthByBin)
             {
-                float pathLengthToBin = GetPathLengthTo(bin.transform.position);
+                float pathLengthToBin = entry.Value;
                 if (pathLengthToBin < minPathLength)
                 {
                     minPathLength = pathLengthToBin;
-                    closestBin = bin;
+                    currentClosestBin = entry.Key;
                 }
             }
 
-            binBehaviour = closestBin.GetComponent<BinBehaviour>();
-            return closestBin;
+            closestBin = currentClosestBin;
+            if (closestBin != null)
+            {
+                npcMover.ReachedDestination += OnReached;
+                npcMover.MoveTo(closestBin.transform.position);  
+            }  
         }
 
-        private float GetPathLengthTo(Vector3 target)
+        void OnReached()
         {
-            NavMeshPath path = new NavMeshPath();
-            NavMesh.CalculatePath(npcAgent.transform.position, target, NavMesh.AllAreas, path);
+            StartCoroutine(ThrowTrashInBin());
+        }
 
-            float pathLength = 0;
-            Vector3 lastCorner = path.corners[0];
+        IEnumerator ThrowTrashInBin()
+        {
+            npcMover.ReachedDestination -= OnReached;
 
-            foreach (Vector3 currentCorner in path.corners)
+            yield return new WaitWhile(() => closestBin == null);
+
+            closestBin.ReceiveItem(itemDB.GetRandomItem());
+            if (garbageDisposed != null) garbageDisposed.Invoke();
+            pathLengthByBin.Clear();
+        }
+
+        Path pathToBin;
+        IEnumerator FillPathLengthsDictionary()
+        {
+            for (int i = 0; i < bins.Length; i++)
             {
-                pathLength += Vector3.Distance(lastCorner, currentCorner);
-                lastCorner = currentCorner;
+                binsSearchingAI.destination = bins[i].transform.position;
+                binsSearchingAI.SearchPath();
+                yield return new WaitWhile(() => pathToBin == null);
+
+                float pathLength = 0;
+                Vector3 lastCorner = (Vector3)pathToBin.path[0].position;
+
+                foreach (GraphNode currentCorner in pathToBin.path)
+                {
+                    pathLength += Vector3.Distance(lastCorner, (Vector3)currentCorner.position);
+                    lastCorner = (Vector3)currentCorner.position;
+                }
+
+                pathLengthByBin.Add(bins[i], pathLength);
+
+                pathToBin = null;
             }
 
-            return pathLength;
+            fillPathLegthsDictionary_CR_running = false;
         }
     }
 }

@@ -1,40 +1,48 @@
 ﻿using System;
 using UnityEngine;
-using Ticket.GeneralMovement;
-using Ticket.PlayerMovement;
 
-[AddComponentMenu("Ticket/Movement target")]
-public class MovementTarget : MonoBehaviour, IClickable
+namespace Ticket.GeneralMovement
 {
-    [SerializeField] Mover mover;
-    [SerializeField] Transform playerTransform;
-    [SerializeField] ControllRaycaster controllRaycaster;
-
-    public Action ObjectReached;
-
-    private bool agentMovesToObject;
-
-    private void Awake()
+    [AddComponentMenu("Ticket/General Movement/Movement target")]
+    public class MovementTarget : MonoBehaviour
     {
-        //controllRaycaster.ClickableObjects.Add(this.transform, this);
-    }
+        [SerializeField] Mover mover;
+        [SerializeField] Transform aiTransform;
 
-    public void OnClick(GameObject clickedObject, Vector3 clickPoint)
-    {
-        mover.MoveTo(clickedObject.transform.position);
-        agentMovesToObject = true;
-    }
+        public Action TargetReached;
 
-    /* Используется OnTriggerStay, а не OnTriggerEnter т.к. если объект заспаунится прямо на герое, 
-       то OnTriggerEnter при щелчке по предмету не сработает. */
-    private void OnTriggerStay(Collider other)
-    {
-        if (agentMovesToObject && other.gameObject.tag == "Player")
+        bool subscribed;
+
+        public void WaitForArrival()
         {
-            agentMovesToObject = false;
-            playerTransform.rotation = 
-                Quaternion.LookRotation(this.transform.position - playerTransform.position);
-            if (ObjectReached != null) ObjectReached.Invoke();
+            if (!subscribed)
+            {
+                mover.WentToDestination += StartWaiting;
+                subscribed = true;
+            }       
+        }
+
+        void StartWaiting()
+        {
+            mover.ReachedDestination += RotateToTarget;
+            mover.ChangedDestination += StopWaiting;
+        }
+
+        void StopWaiting()
+        {
+            mover.WentToDestination -= StartWaiting;
+            mover.ReachedDestination -= RotateToTarget;
+            mover.ChangedDestination -= StopWaiting;
+            subscribed = false;
+        }
+
+        void RotateToTarget()
+        {
+            StopWaiting();
+            Quaternion rotation = Quaternion.LookRotation(transform.position - aiTransform.position);
+            Quaternion rotationFreezeXY = new Quaternion(0, rotation.y, 0, rotation.w);
+            aiTransform.rotation = rotationFreezeXY;
+            if (TargetReached != null) TargetReached.Invoke();
         }
     }
 }

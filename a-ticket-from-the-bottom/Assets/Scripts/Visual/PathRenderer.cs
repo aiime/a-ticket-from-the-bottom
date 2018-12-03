@@ -53,14 +53,24 @@ namespace Ticket.Visual
 
                 RaycastHit hit = RaycastGround();
 
-                if (hitGround)
+                if (hit.transform.tag == "Ground")
                 {
                     waitForRender = true;
                     pointer.gameObject.SetActive(false);
                     playerAI.destination = hit.point;
                     playerAI.SearchPath();
                     // Дальше, как только ИИ вычислит путь, сработает 'pathCallback', и запустится подписанный на него 
-                    // метод 'RenderPath', который отрисует этот путь.
+                    // метод 'RenderPath', который отрисует путь.
+                }
+
+                if (hit.transform.tag == "Movement Target")
+                {
+                    waitForRender = true;
+                    pointer.gameObject.SetActive(false);
+                    playerAI.destination = hit.transform.position;
+                    playerAI.SearchPath();
+                    // Дальше, как только ИИ вычислит путь, сработает 'pathCallback', и запустится подписанный на него 
+                    // метод 'RenderPath', который отрисует путь.
                 }
             }
 
@@ -79,7 +89,7 @@ namespace Ticket.Visual
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit = new RaycastHit();
 
-            hitGround = Physics.Raycast(ray, out hit, float.PositiveInfinity, 1 << LayerMask.NameToLayer("Ground"));
+            Physics.Raycast(ray, out hit);
 
             return hit;
         }

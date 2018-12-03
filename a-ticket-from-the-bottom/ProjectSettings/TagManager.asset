@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Clickable
   - Bin
+  - Movement Target
   layers:
   - Default
   - TransparentFX

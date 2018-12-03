@@ -2,26 +2,33 @@
 using UnityEngine;
 using Ticket.Items;
 using Ticket.Inventory;
+using Ticket.GeneralMovement;
 
 namespace Ticket.Bin
 {
     [AddComponentMenu("Ticket/Bin/Bin behaviour")]
+    [RequireComponent(typeof(MovementTarget))]
     public class BinBehaviour : MonoBehaviour
     {
-        [SerializeField] MovementTarget movementTarget;
         [SerializeField] InventoryModel inventoryModel;
+        [SerializeField] ItemDB itemDB;
 
-        private Stack<Item> itemsInside = new Stack<Item>();
+        Stack<Item> itemsInside = new Stack<Item>();
+        MovementTarget movementTarget;
 
-        private void Awake()
+        void Awake()
         {
-            movementTarget.ObjectReached += () => GiveItem();
+            movementTarget = GetComponent<MovementTarget>();
+            movementTarget.TargetReached += () => GiveItem();
+            ReceiveItem(itemDB.GetRandomItem());
+            ReceiveItem(itemDB.GetRandomItem());
+            ReceiveItem(itemDB.GetRandomItem());
         }
 
         public void ReceiveItem(Item item)
         {
             itemsInside.Push(item);
-            print("received: x1 [" + item.Name + "]");
+            print("received: x1[" + item.Name + "]");
         }
 
         public void GiveItem()

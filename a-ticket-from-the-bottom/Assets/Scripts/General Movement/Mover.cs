@@ -11,7 +11,6 @@ namespace Ticket.GeneralMovement
     /// <see cref="ReachedDestination"/>, сообщающие о статусе движения.
     /// </summary>
     [RequireComponent(typeof(AIPath))]
-    [RequireComponent(typeof(Seeker))]
     [AddComponentMenu("Ticket/General Movement/Mover")]
     public class Mover : MonoBehaviour
     {
@@ -19,10 +18,11 @@ namespace Ticket.GeneralMovement
 
         public Action WentToDestination;
         public Action ReachedDestination;
+        public Action ChangedDestination;
+        public MovementTarget CurrentMovementTarget { get; private set; }
 
         AIPath ai;
         Seeker seeker;
-        bool aiMoves;
 
         void Awake()
         {
@@ -32,11 +32,22 @@ namespace Ticket.GeneralMovement
 
         public void MoveTo(Vector3 destination)
         {
-            if (aiMoves) return;
-
-            aiMoves = true;
-            ai.canMove = true;
             ai.destination = destination;
+            if (ChangedDestination != null) ChangedDestination.Invoke();
+            ai.SearchPath();
+            StartCoroutine(WaitForPathComplete());
+        }
+
+        public void MoveTo(MovementTarget movementTarget)
+        {
+            if (movementTarget == CurrentMovementTarget)
+            {
+                return;
+            }
+
+            CurrentMovementTarget = movementTarget;
+            ai.destination = movementTarget.transform.position;
+            if (ChangedDestination != null) ChangedDestination.Invoke();
             ai.SearchPath();
             StartCoroutine(WaitForPathComplete());
         }
@@ -44,6 +55,25 @@ namespace Ticket.GeneralMovement
         IEnumerator WaitForPathComplete()
         {
             while (ai.pathPending) yield return null;
+
+            // Проверяем, не стоит ли ИИ на клетке, по которой щёлкнули.
+            List<GraphNode> path = seeker.GetCurrentPath().path;
+            Vector3 pathEnd = (Vector3)path[path.Count - 1].position;
+            if (Vector3.Distance(ai.position, pathEnd) > ai.endReachedDistance)
+            {
+                // Если не стоит, то движемся.
+                ai.canMove = true;
+            }
+            else
+            {
+                // Если стоит, то удаляем путь и не движемся.
+                ai.enabled = false;
+                ai.enabled = true;
+                CurrentMovementTarget = null;
+                if (WentToDestination != null) WentToDestination.Invoke();
+                if (ReachedDestination != null) ReachedDestination.Invoke();
+                yield break;
+            }
 
             if (WentToDestination != null) WentToDestination.Invoke();
             StartCoroutine(WaitForDestinationReached());
@@ -53,8 +83,8 @@ namespace Ticket.GeneralMovement
         {
             while (!ai.reachedEndOfPath) yield return null;
 
-            aiMoves = false;
             ai.canMove = false;
+            CurrentMovementTarget = null;
             if (ReachedDestination != null) ReachedDestination.Invoke();
         }
     }

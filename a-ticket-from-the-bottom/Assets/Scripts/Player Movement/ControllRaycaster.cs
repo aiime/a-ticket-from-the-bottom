@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using Ticket.GeneralMovement;
-using Pathfinding;
 
 namespace Ticket.PlayerMovement
 {
@@ -14,7 +12,6 @@ namespace Ticket.PlayerMovement
     public class ControllRaycaster : MonoBehaviour
     {
         Mover playerMover;
-        bool hitGround;
 
         private void Awake()
         {
@@ -27,32 +24,30 @@ namespace Ticket.PlayerMovement
             {
                 if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                RaycastHit hit = RaycastGround();
+                RaycastHit hit = RaycastMousePosition();
 
-                if (hitGround)
+                if (hit.transform.tag == "Movement Target")
                 {
-                    MovePlayer(hit);
+                    MovementTarget movementTarget = hit.transform.gameObject.GetComponent<MovementTarget>();
+                    movementTarget.WaitForArrival();
+                    playerMover.MoveTo(movementTarget);
+                }
+
+                if (hit.transform.tag == "Ground")
+                {
+                    playerMover.MoveTo(hit.point);
                 }
             }   
         }
 
-        /// <summary>
-        /// Возвращает <see cref="RaycastHit"/> по месту попадания. Если попал по земле, то поднимет флаг 
-        /// <see cref="hitGround"/>, а иначе опустит.
-        /// </summary>
-        RaycastHit RaycastGround()
+        RaycastHit RaycastMousePosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit = new RaycastHit();
 
-            hitGround = Physics.Raycast(ray, out hit, float.PositiveInfinity, 1 << LayerMask.NameToLayer("Ground"));
+            Physics.Raycast(ray, out hit);
 
             return hit;
-        }
-
-        void MovePlayer(RaycastHit hit)
-        {
-            playerMover.MoveTo(hit.point);
         }
     }
 }

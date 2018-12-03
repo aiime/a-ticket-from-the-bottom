@@ -17,5 +17,10 @@ namespace Ticket.Items
         {
             return (id < gameItems.Count) ? gameItems[id] : null;
         }
+
+        public Item GetRandomItem()
+        {
+            return gameItems[Random.Range(0, gameItems.Count)];
+        }
     }
 }
