@@ -14,8 +14,6 @@ namespace Ticket.GeneralMovement
     [AddComponentMenu("Ticket/General Movement/Mover")]
     public class Mover : MonoBehaviour
     {
-        [SerializeField] float speed;
-
         public Action WentToDestination;
         public Action ReachedDestination;
         public Action ChangedDestination;

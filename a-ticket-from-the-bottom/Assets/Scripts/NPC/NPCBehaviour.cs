@@ -14,8 +14,8 @@ namespace Ticket.NPC
 
         private void Start()
         {
-            patrolBehaviour.StartPatrol();
-            StartCoroutine(DisposeTrashAfterPause());
+            if (patrolBehaviour != null) patrolBehaviour.StartPatrol();
+            if (garbageDisposalBehaviour != null) StartCoroutine(DisposeTrashAfterPause());
         }
 
         IEnumerator DisposeTrashAfterPause()
